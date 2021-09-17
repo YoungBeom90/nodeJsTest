@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유저정보 화면</title>
+    <link href="/css/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <script type="text/javascript" src="/js-lib/jquery/jquery-3.6.0.js"></script>
+    <script type="text/javascript" src="/js-lib/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="/js-lib/axios/axios.min.js"></script>
+</head>
+<body>
+    <h2>유저정보 화면 입니다.</h2>
+    <div id="userSection">
+        <button type="button" id="selectUserInfo">유저정보 가져오기</button>
+        
+    </div>
+    <script>
+        $("#selectUserInfo").click(function() {
+                axios.get('/selectUser')
+                    .then(function(res) {
+
+                        console.log(res.data);
+                        
+                        let html = "";
+                        let title = ["ID", "PW", "NAME", "ADDRESS", "AUTH"];
+                        for(let i=0; i<res.data.length; i++) {
+                            html += `<ul id="userInfo" class="sortable">`;
+                            for(let j=0; j<res.data[i].length; j++) {
+                                html += `<li class="ui-state-default"><span>${title[j]} : </span>${res.data[i][j]}</li>`;
+                            }
+                            html+=`</ul>`;
+                        }
+                        
+                        $("#userSection").append(html);
+                        $(".sortable").sortable();
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            });
+    </script>
+</body>
+</html>
